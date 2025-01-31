@@ -30,8 +30,7 @@ def base(request: Request):
     message = """
     Hello from the CircuitPython HTTP Server!
         1. /temperature
-        2. /readIR
-        3. /???
+        2. /insert_your_own_page_here
     """
     return Response(request, message)
 
@@ -42,24 +41,6 @@ def get_sensor_data(request: Request):
 
     temp_response = f"Celsius: {temp_c:.1f} Farenheit: {temp_f:.1f}"
     return Response(request, str(temp_response))
-
-@server.route("/readIR")
-def get_IR_data(request: Request):
-    pulses = decoder.read_pulses(pulsein)
-    print("Heard", len(pulses), "Pulses: ", pulses)
-    print("-----------------------")
-    if pulses:
-        return Response(request, str(pulses))
-    else:
-        return Response(request, "Error: Pulses not read!")
-
-@server.route("/secrets")
-def easter_egg(request: Request):
-    page = """Try putting this in the golden machine: NZVAIYEKT"""
-    return Response(request, page)
-
-
-    
 
 print(f"Created access point {AP_SSID} with page hosted @ {wifi.radio.ipv4_address_ap}")
 server.serve_forever(str(wifi.radio.ipv4_address_ap))
