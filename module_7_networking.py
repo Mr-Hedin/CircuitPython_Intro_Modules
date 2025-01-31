@@ -10,6 +10,7 @@ import microcontroller
 import wifi
 import socketpool
 import time
+from adafruit_httpserver import Server, Request
 
 AP_SSID = "IR Receiver"
 AP_PASSWORD = "hacktheplanet"
