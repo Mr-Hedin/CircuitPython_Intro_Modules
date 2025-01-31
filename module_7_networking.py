@@ -10,7 +10,7 @@ import microcontroller
 import wifi
 import socketpool
 import time
-from adafruit_httpserver import Server, Request
+from adafruit_httpserver import Server, Request, Response
 
 AP_SSID = "IR Receiver"
 AP_PASSWORD = "hacktheplanet"
@@ -40,10 +40,7 @@ def get_sensor_data(request: Request):
     temp_c = microcontroller.cpu.temperature
     temp_f = (temp_c * 9/5) + 32
 
-    temp_response = {
-        "temperature_c": f"{temp_c:.1f}",
-        "temperature_f": f"{temp_f:.1f}"
-    }
+    temp_response = f"Celsius: {temp_c:.1f} Farenheit: {temp_f:.1f}"
     return Response(request, str(temp_response))
 
 @server.route("/readIR")
