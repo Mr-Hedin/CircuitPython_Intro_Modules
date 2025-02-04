@@ -7,9 +7,6 @@ of our sensor readings. This combines everything we've learned about:
 - Networking (serving a webpage)
 - Variables
 """
-
-
-
 import board
 import microcontroller
 import wifi
@@ -18,7 +15,7 @@ import time
 import digitalio
 from adafruit_httpserver import FileResponse, Response, Request, Server
 # ssid is the network name
-SSID = "Web Dashboard"
+SSID = "My Web Dashboard SSID"
 # create a secure password
 password = "hacktheplanet"
 
@@ -39,8 +36,10 @@ pool = socketpool.SocketPool(wifi.radio)
 # sets the '/static' folder to our server's default folder
 server = Server(pool, "/static", debug=True)
 count = 0
+
+
 # Here we create a 'route', a route is a simple way to attach a function to an URL endpoint. 
-# For example, something like 192.168.4.1/temperature would activate the get_temperature() function and return the MCU's temperature.
+# For example, something like 192.168.4.1/temperature would activate the red_page() function and return the MCU's temperature.
 @server.route("/")
 def base(request: Request):
     message = """
@@ -57,12 +56,9 @@ def red_page(request: Request):
     message = """
     Red LED is toggled!
     """
-
+    
     # Turn on the LED
-    if red_led.value == False:
-        red_led.value = True
-    else:
-        red_led.value = False
+    
     
     return Response(request, str(message))
 
@@ -73,49 +69,14 @@ def green_page(request: Request):
     """
 
     # Turn on the LED
-    if green_led.value == False:
-        green_led.value = True
-    else:
-        green_led.value = False
+    
     
     return Response(request, str(message))
 
+# If you want to display an image to your user
 @server.route("/image")
 def image_page(request: Request):
     return FileResponse(request, "image.jpg","/static")
-
-@server.route("/get_count")
-def get_count(request:Request):
-    global count
-    return Response(request, count)
-
-@server.route("/increment")
-def increment(request:Request):
-    global count
-    count += 1
-    return Response(request, str(count))
-
-@server.route("/temperature")
-def get_sensor_data(request: Request):
-    temp_c = microcontroller.cpu.temperature
-    temp_f = (temp_c * 9/5) + 32
-    temp_response = f"Celsius: {temp_c:.1f} Farenheit: {temp_f:.1f}"
-    return Response(request, str(temp_response))
-
-# You can even add the IR Leds we worked with before!
-# This is an example, you'll need to initialize the irremote library and set everything up first!
-# @server.route("/readIR")
-# def get_IR_data(request: Request):
-#     pulses = decoder.read_pulses(pulsein)
-#     print("Heard", len(pulses), "Pulses: ", pulses)
-#     print("-----------------------")
-#     if pulses:
-#         return Response(request, str(pulses))
-#     else:
-#         return Response(request, "Error: Pulses not read!")
-
-# If you're really loving this server, try adding a route that updates a little screen with SSD1306 Display code!
-
 
 print(f" Created access point {SSID} with page hosted @ {wifi.radio.ipv4_address_ap}")
 server.serve_forever(str(wifi.radio.ipv4_address_ap))
