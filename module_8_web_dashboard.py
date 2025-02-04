@@ -4,9 +4,8 @@ CircuitPython Intro Tutorials - Module 8: Web Dashboard (Final Project)
 This is our final project! We'll create a web server that shows a dashboard
 of our sensor readings. This combines everything we've learned about:
 - Sensors (temperature)
-- Displays (showing status)
 - Networking (serving a webpage)
-- Variables and loops
+- Variables
 """
 
 
@@ -114,6 +113,8 @@ def get_sensor_data(request: Request):
 #         return Response(request, str(pulses))
 #     else:
 #         return Response(request, "Error: Pulses not read!")
+
+# If you're really loving this server, try adding a route that updates a little screen with SSD1306 Display code!
 
 
 print(f" Created access point {SSID} with page hosted @ {wifi.radio.ipv4_address_ap}")
