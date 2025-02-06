@@ -123,8 +123,8 @@ def power_send(request: Request):
     message = "Power signal sent! Request Success!"
     return Response(request, message)
 
-
-@server.route("/light")
+# PHOTORESISTOR
+@server.route("/lightlevel")
 def get_light_level(request:Request):
     # You'll need the following code to get your analog sensor set up!
     # import board
